@@ -82,17 +82,21 @@ class OptredenRepository extends ServiceEntityRepository
         return(false);
     }
 
-    public function deleteOptredens($id) {
+    public function deleteOptredenAndArtiest($id) {
         $optreden = $this->find($id);
-
         $artiest = $this->fetchArtiest($optreden->getArtiest());
-        $this->artiestRepository->deleteArtiest($artiest->getId());
 
         if($optreden) {
+            // First delete the Child-Table
             $this->_em->remove($optreden);
             $this->_em->flush();
+
+            // Then the Parent-Table
+            $this->artiestRepository->deleteArtiest($artiest->getId());
+
             return(true);
         }
+        
     
         return(false);
     }

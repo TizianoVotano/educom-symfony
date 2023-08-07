@@ -27,8 +27,7 @@ class OptredenController extends BaseController
         /// Ook hier weer een kleine simulatie van een "POST" request
         $optreden = [
             "poppodium_id" => 1,
-            "hoofdprogramma_id" => 1, 
-            "voorprogramma_id" => 2,
+            "hoofdprogramma_id" => 3,
             "omschrijving" => "Een avondje blues uit het boekje...",
             "datum" => "2022-07-14",
             
@@ -54,8 +53,7 @@ class OptredenController extends BaseController
         /// Ook hier weer een kleine simulatie van een "POST" request
         $optreden = [
             "poppodium_id" => 1,
-            "hoofdprogramma_id" => 1, 
-            "voorprogramma_id" => 2,
+            "hoofdprogramma_id" => 3,
             "omschrijving" => "Een avondje blues uit het boekje...",
             "datum" => "2022-07-14",
             
@@ -67,7 +65,7 @@ class OptredenController extends BaseController
         ];
 
         $result = $rep->saveOptreden($optreden);
-        $isDeleted = $rep->deleteOptredens($result);
+        $isDeleted = $rep->deleteOptredenAndArtiest($result); // dit duidelijker opstellen
 
         dd($isDeleted);
     }
