@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/blog_list')]
-class BlogController extends AbstractController
+class BlogController extends BaseController
 {
     #[Route('/', name: 'blog_list')]
     #[Template()]
@@ -20,15 +20,20 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/show/{slug}',name:'blog_show')]
-    public function show($slug) {
-        dd('hi');
-    }
-
     #[Route('/show/{page}',name:'blog_list', requirements: ['page' => '\d+'])]
     public function list($page) {
         dd('list');
     }
+
+    #[Route('/show/{id}',name:'blog_show')]
+    public function show($id = 1) {
+        $this->log("info Message from extended BaseController", "warning");
+        $this->log("info Message from extended BaseController", "info");
+        $this->log("info Message from extended BaseController", "error");
+        dd('hi');
+    }
+
+    
 
     
 
