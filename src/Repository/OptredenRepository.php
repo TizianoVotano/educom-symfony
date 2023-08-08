@@ -24,23 +24,12 @@ class OptredenRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Optreden::class);
-        $this->artiestRepository = $this->_em->getRepository(Artiest::class);
-        $this->poppodiumRepository = $this->_em->getRepository(Poppodium::class);
+        //$this->artiestRepository = $this->_em->getRepository(Artiest::class);
+        //$this->poppodiumRepository = $this->_em->getRepository(Poppodium::class);
     }
 
     public function getAllOptredens() {
-        $optredens = $this->findAll();
-        return($optredens);
-    }
-    
-    private function fetchArtiest($id) {
-        $artiest = $this->artiestRepository->fetchArtiest($id);
-        return($artiest);
-    }
-
-    private function fetchPoppodium($id) {
-        $podium = $this->poppodiumRepository->fetchPoppodium($id);
-        return($podium);
+        return ($this->findAll());
     }
 
     public function saveOptreden($params) {
@@ -59,7 +48,6 @@ class OptredenRepository extends ServiceEntityRepository
         }
         $optreden->setOmschrijving($params["omschrijving"]);
         $optreden->setDatum(new \DateTime($params["datum"]));
-
         $optreden->setPrijs($params["prijs"]);
         $optreden->setTicketUrl($params["ticket_url"]);
         $optreden->setAfbeeldingUrl($params["afbeelding_url"]);
@@ -67,63 +55,46 @@ class OptredenRepository extends ServiceEntityRepository
         $this->_em->persist($optreden);
         $this->_em->flush();
 
-        return($optreden);
-        
+        return($optreden);   
     }
-
-    public function deleteOptreden($id) {
-        $optreden = $this->find($id);
-        if($optreden) {
-            $this->_em->remove($optreden);
-            $this->_em->flush();
-            return(true);
-        }
     
-        return(false);
-    }
+    // private function fetchArtiest($id) {
+    //     $artiest = $this->artiestRepository->fetchArtiest($id);
+    //     return($artiest);
+    // }
 
-    public function deleteOptredenAndArtiest($id) {
-        $optreden = $this->find($id);
-        $artiest = $this->fetchArtiest($optreden->getArtiest());
+    // private function fetchPoppodium($id) {
+    //     $podium = $this->poppodiumRepository->fetchPoppodium($id);
+    //     return($podium);
+    // }
 
-        if($optreden) {
-            // First delete the Child-Table
-            $this->_em->remove($optreden);
-            $this->_em->flush();
+    // public function deleteOptreden($id) {
+    //     $optreden = $this->find($id);
+    //     if($optreden) {
+    //         $this->_em->remove($optreden);
+    //         $this->_em->flush();
+    //         return(true);
+    //     }
+    
+    //     return(false);
+    // }
 
-            // Then the Parent-Table
-            $this->artiestRepository->deleteArtiest($artiest->getId());
+    // public function deleteOptredenAndArtiest($id) {
+    //     $optreden = $this->find($id);
+    //     $artiest = $this->fetchArtiest($optreden->getArtiest());
 
-            return(true);
-        }
+    //     if($optreden) {
+    //         // First delete the Child-Table
+    //         $this->_em->remove($optreden);
+    //         $this->_em->flush();
+
+    //         // Then the Parent-Table
+    //         $this->artiestRepository->deleteArtiest($artiest->getId());
+
+    //         return(true);
+    //     }
         
     
-        return(false);
-    }
-
-
-//    /**
-//     * @return Optreden[] Returns an array of Optreden objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Optreden
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //     return(false);
+    // }
 }

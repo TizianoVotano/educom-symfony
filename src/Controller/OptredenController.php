@@ -10,12 +10,18 @@ use App\Entity\Artiest;
 use App\Entity\Poppodium;
 use App\Entity\Optreden;
 use App\Repository\OptredenRepository;
+use App\Service\OptredenService;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 #[Route('/optreden')]
 class OptredenController extends BaseController
 {
-    //$doctrine = null;
+    private $os;
+
+    public function __construct(OptredenService $os) {
+        $this->os = $os;
+    }
 
     #[Route('/save', name: 'optreden_save')]
     public function saveOptreden() : Response {
@@ -38,7 +44,7 @@ class OptredenController extends BaseController
             "afbeelding_url" => "https://melkweg.nl/optreden/plaatje.jpg"
         ];
 
-        $result = $rep->saveOptreden($optreden);
+        $result = $this->os->saveOptreden($optreden);
         dd($result);
 
     }
