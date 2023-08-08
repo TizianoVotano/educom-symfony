@@ -45,33 +45,31 @@ class OptredenService {
         return($result);
     }
 
-    // public function deleteOptreden($id) {
-    //     $optreden = $this->find($id);
-    //     if($optreden) {
-    //         $this->_em->remove($optreden);
-    //         $this->_em->flush();
-    //         return(true);
-    //     }
-        
-    //     return(false);
-    // }
-    
-    // public function deleteOptredenAndArtiest($id) {
-    //     $optreden = $this->find($id);
-    //     $artiest = $this->fetchArtiest($optreden->getArtiest());
-    
-    //     if($optreden) {
-    //         // First delete the Child-Table
-    //         $this->_em->remove($optreden);
-    //         $this->_em->flush();
-    
-    //         // Then the Parent-Table
-    //         $this->artiestRepository->deleteArtiest($artiest->getId());
-    
-    //         return(true);
-    //     }
+    // #[Route('/delete', name: 'optreden_delete')]
+    // public function deleteOptreden() : Response {
+    //     $doctrine = $this->doctrine();
+
+    //     /** @var OptredenRepository $rep */
+    //     $rep = $doctrine->getRepository(Optreden::class);
+
+    //     /// Ook hier weer een kleine simulatie van een "POST" request
+    //     $optreden = [
+    //         "poppodium_id" => 1,
+    //         "hoofdprogramma_id" => 3,
+    //         "omschrijving" => "Een avondje blues uit het boekje...",
+    //         "datum" => "2022-07-14",
             
-        
-    //     return(false);
+    //         /// Prijs altijd in centen wegscrhijven ivm afronding
+    //         "prijs" => 3800,
+            
+    //         "ticket_url" => "https://melkweg.nl/ticket/",
+    //         "afbeelding_url" => "https://melkweg.nl/optreden/plaatje.jpg"
+    //     ];
+
+    //     $result = $rep->saveOptreden($optreden);
+    //     $isDeleted = $rep->deleteOptredenAndArtiest($result); // dit duidelijker opstellen
+
+    //     dd($isDeleted);
     // }
+
 }
