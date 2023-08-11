@@ -52,6 +52,17 @@ class OptredenRepository extends ServiceEntityRepository
         
     }
 
+    /**
+    * @return Optreden[] Returns an array of Optreden objects
+    */
+    public function getAllOptredensArray(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.id', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     // public function deleteOptreden($id) {
     //     $optreden = $this->find($id);
     //     if($optreden) {

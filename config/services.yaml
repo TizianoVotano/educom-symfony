@@ -24,3 +24,9 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\OptredenService:
         autowire: true
+        
+    App\Service\ArtiestService:
+        autowire: true
+    
+    App\Service\PoppodiumService:
+        autowire: true

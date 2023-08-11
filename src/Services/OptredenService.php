@@ -28,6 +28,10 @@ class OptredenService {
         return($this->poppodiumRepository->fetchPoppodium($id));
     }
 
+    public function getAllOptredens() {
+        return $this->optredenRepository->getAllOptredensArray();
+    }
+
     public function saveOptreden($params) {
         $data = [
           "id" => (isset($params["id"]) && $params["id"] != "") ? $params["id"] : null,

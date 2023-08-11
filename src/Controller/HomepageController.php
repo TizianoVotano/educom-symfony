@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Optreden;
+use App\Service\OptredenService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,6 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
 #[Route('/')]
 class HomepageController extends AbstractController
 {
+
+    private $optredenService;
+
+    public function __construct(OptredenService $optredenService) {
+        $this->optredenService = $optredenService;
+    }
+
     #[Route('/', name: 'homepage')]
     #[Template()]
     public function index(): Response
@@ -79,5 +87,27 @@ class HomepageController extends AbstractController
         //$params = $request->request->all();
         dd($params);
         
+    }
+
+    #[Route('/overview.{_format}', name: 'optredens_output', requirements: ['_format' => 'xml|json'])]
+    public function overview($_format) {
+        $data = $this->optredenService->getAllOptredens();
+
+        if($_format == "json") {
+            return($this->json($data));
+        } else {
+        
+        /// Om een array naar XML om te zetten is een parser nodig.
+        /// Hier even een very quick en very dirty oplossing
+        /// - die je eventueel ook met Twig zou kunnen maken.
+        $d = "<data>";
+            foreach($data as $record) {
+                    $id = $record["id"];
+                    $omschrijving = $record["omschrijving"];
+                    $d .= "<record id='$id'>$omschrijving</record>";
+            }   
+            $d .= "</data>";
+            return(new Response($d));
+        }
     }
 }

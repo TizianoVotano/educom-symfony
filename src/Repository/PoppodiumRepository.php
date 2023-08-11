@@ -31,6 +31,8 @@ class PoppodiumRepository extends ServiceEntityRepository
         $podium->setTelefoonnummer($params["telefoonnummer"]);
         $podium->setEmail($params["email"]);
         $podium->setWebsite($params["website"]);
+        $podium->setLogoUrl($params["logo_url"]);
+        $podium->setAfbeeldingUrl($params["afbeelding_url"]);
 
         $this->_em->persist($podium);
         $this->_em->flush();
