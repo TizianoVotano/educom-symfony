@@ -1,0 +1,104 @@
+title VAC-TRA-Onafgewerkt-transactiemodel-TV-v1
+
+actor Gebruiker
+participant Front End
+participant Back End
+database Database
+
+==Transactie: Homepage==
+Gebruiker->Front End:Startup or Click logo
+Front End->Back End: Search Vacancies
+Back End->Database:Execute Query
+Database->Back End:Result Query
+Back End->Front End:Update Front End
+
+==Transactie: Vacancypage==
+Gebruiker->Front End:Click Vacancy
+Front End->Back End: Get Vacancy Details
+Back End->Database:Execute Query
+Database->Back End:Result Query
+Back End->Front End:Show Vacancy Page
+
+==Transactie: MyApplicationsPage==
+Gebruiker->Front End:Click MyApplications Button (header)
+Front End->Back End: Get All Vacancies User Applied For
+Back End->Database: if UserLoggedIn Execute Query
+Database->Back End:Result Query
+Back End->Front End:Show MyApplicationsPage
+
+==Transactie: LoginPage==
+Gebruiker->Front End:Click Login Button (header)
+Front End->Gebruiker:Show LoginPage
+
+==Transactie: ProfilePage==
+Gebruiker->Front End:Click Profile Button (header)
+Front End->Back End: Get All Vacancies User Applied For
+Back End->Database: if UserLoggedIn Execute Query
+Database->Back End:Result Query
+Back End->Front End:Show ProfilePage
+
+==Transactie: Login==
+Gebruiker->Front End:Click Login Button (LoginPage)
+Front End->Back End: Send Username and Password
+Back End->Database: Verify Combination
+Database->Back End:Result
+Back End->Front End:Show HomePage (update header)
+
+==Transactie: Register (ROLE_CANDIDATE)==
+Gebruiker->Front End:Click Register Button (LoginPage and header)
+Front End->Back End: Send user_info
+Back End->Database: Verify and Create User / Profile
+Database->Back End:Result
+Back End->Front End:(+)Show LoginPage (-)Show Error in RegisterPage
+
+==Transactie: Register (ROLE_EMPLOYER)==
+Gebruiker->Back End:Insert Command with Data (+ default Password!) from selected Excelsheet (SelectFile prompt/popup)
+Back End->Database: Verify and Create User / Profile
+Database->Back End:Result
+Back End->Gebruiker: Show result in CLI: (+) Succesful (-) Error 
+
+==Transactie: Update Profile Info==
+Gebruiker->Front End:Click Save Button (ProfilePage)
+Front End->Back End: Send inserted profile_info (to update)
+Back End->Database: Verify and Update Profile
+Database->Back End:Result
+Back End->Front End:Update ProfilePage
+
+==Transactie: Create Vacancy (Employers)==
+Gebruiker->Front End:Click Create Button (VacancyPage)
+Front End->Back End: Send data
+Back End->Database: if(EMPLOYER) Create Vacancy
+Database->Back End:Result
+Back End->Front End:Show (created) VacancyPage
+
+==Transactie: Create Vacancy (Employers)==
+Gebruiker->Front End:Click Create Button (VacancyPage)
+Front End->Back End: Send data
+Back End->Database: if(EMPLOYER) Create Vacancy
+Database->Back End:Result
+Back End->Front End:Show (created) VacancyPage
+
+==Transactie: Get Candidates (Employers)==
+Gebruiker->Front End:Click Candidates-button (Vacancypage) OR load at bottom of VacancyPage
+Front End->Back End: Get Profiles
+Back End->Database: findCandidates (those who applied)
+Database->Back End:Result
+Back End->Front End:Show CandidatesPage OR Update VacancyPage
+
+==Transactie: Invite Candidate==
+Gebruiker->Front End:Click Candidates-button (Vacancypage) OR load at bottom of VacancyPage
+Front End->Back End: Get Profiles
+Back End->Database: findCandidates (those who applied)
+Database->Back End:Result
+Back End->Front End:Show CandidatesPage OR Update VacancyPage
+
+==Transactie: (Un)Apply==
+Gebruiker->Front End:Click Candidates-button (Vacancypage) OR load at bottom of VacancyPage
+Front End->Back End: Get Profiles
+Back End->Database: findCandidates (those who applied)
+Database->Back End:Result
+Back End->Front End:Show CandidatesPage OR Update VacancyPage
+
+Gebruiker<--Front End:drag to move
+note over Front End,Back End:Click Help menu for **instructions** and **examples**
+Front End->(3)Back End:non-instantaneous message

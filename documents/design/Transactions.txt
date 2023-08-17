@@ -1,0 +1,17 @@
+Homepagina laden
+Vacaturepagina laden
+Mijn sollicitaties pagina laden
+Loginpagina laden
+Profielpagina laden
+
+Inloggen
+Registreren (ROLE_CANDIDATE)
+Registreren CLI (ROLE_EMPLOYER)
+
+Profiel info bijwerken (opslaan)
+Vacature bijwerken (ROLE_EMPLOYER)	// TO ADD
+
+Vacature plaatsen (werkgevers)
+getSollicitanten (voor een werkgever)
+Selecteer sollicitant(geselecteerden) 	// TO EDIT
+solliciteer en verwijder (als ingelogd)	// TO EDIT
