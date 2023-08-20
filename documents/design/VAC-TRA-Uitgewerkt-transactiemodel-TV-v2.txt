@@ -100,7 +100,3 @@ Front End->Back End: Send Candidate data
 Back End->Database: Verify and Create Application
 Database->Back End:Result
 Back End->Front End:Show Result
-
-Gebruiker<--Front End:drag to move
-note over Front End,Back End:Click Help menu for **instructions** and **examples**
-Front End->(3)Back End:non-instantaneous message
