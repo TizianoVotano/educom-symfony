@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,6 +29,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $lastname = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $picture = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date_of_birth = null;
+
+    #[ORM\Column(length: 12)]
+    private ?string $tel_nr = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 8, nullable: true)]
+    private ?string $postal_code = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $cv = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $motivation = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Vacancy::class)]
+    private Collection $vacancies;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Application::class)]
+    private Collection $applications;
+
+    public function __construct()
+    {
+        $this->vacancies = new ArrayCollection();
+        $this->applications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -114,5 +159,185 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): static
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(?string $lastname): static
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(string $picture): static
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getDateOfBirth(): ?\DateTimeInterface
+    {
+        return $this->date_of_birth;
+    }
+
+    public function setDateOfBirth(\DateTimeInterface $date_of_birth): static
+    {
+        $this->date_of_birth = $date_of_birth;
+
+        return $this;
+    }
+
+    public function getTelNr(): ?string
+    {
+        return $this->tel_nr;
+    }
+
+    public function setTelNr(string $tel_nr): static
+    {
+        $this->tel_nr = $tel_nr;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postal_code;
+    }
+
+    public function setPostalCode(?string $postal_code): static
+    {
+        $this->postal_code = $postal_code;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+
+    public function setCv(?string $cv): static
+    {
+        $this->cv = $cv;
+
+        return $this;
+    }
+
+    public function getMotivation(): ?string
+    {
+        return $this->motivation;
+    }
+
+    public function setMotivation(string $motivation): static
+    {
+        $this->motivation = $motivation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vacancy>
+     */
+    public function getVacancies(): Collection
+    {
+        return $this->vacancies;
+    }
+
+    public function addVacancy(Vacancy $vacancy): static
+    {
+        if (!$this->vacancies->contains($vacancy)) {
+            $this->vacancies->add($vacancy);
+            $vacancy->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVacancy(Vacancy $vacancy): static
+    {
+        if ($this->vacancies->removeElement($vacancy)) {
+            // set the owning side to null (unless already changed)
+            if ($vacancy->getUser() === $this) {
+                $vacancy->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            // set the owning side to null (unless already changed)
+            if ($application->getUser() === $this) {
+                $application->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

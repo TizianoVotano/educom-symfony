@@ -17,7 +17,7 @@ class Vacancy
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'vacancies')]
-    private ?company $company_id = null;
+    private ?user $user = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $startdate = null;
@@ -25,25 +25,21 @@ class Vacancy
     #[ORM\Column(length: 50)]
     private ?string $function = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column(length: 6)]
     private ?string $difficulty = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 70)]
     private ?string $location = null;
 
     #[ORM\OneToMany(mappedBy: 'vacancy', targetEntity: Application::class)]
     private Collection $applications;
 
-    #[ORM\ManyToMany(targetEntity: Application::class, mappedBy: 'vacancy')]
-    private Collection $profile;
-
     public function __construct()
     {
         $this->applications = new ArrayCollection();
-        $this->profile = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,14 +47,14 @@ class Vacancy
         return $this->id;
     }
 
-    public function getCompanyId(): ?company
+    public function getUser(): ?user
     {
-        return $this->company_id;
+        return $this->user;
     }
 
-    public function setCompanyId(?company $company_id): static
+    public function setUser(?user $user): static
     {
-        $this->company_id = $company_id;
+        $this->user = $user;
 
         return $this;
     }
@@ -148,33 +144,6 @@ class Vacancy
             if ($application->getVacancy() === $this) {
                 $application->setVacancy(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Application>
-     */
-    public function getProfile(): Collection
-    {
-        return $this->profile;
-    }
-
-    public function addProfile(Application $profile): static
-    {
-        if (!$this->profile->contains($profile)) {
-            $this->profile->add($profile);
-            $profile->addVacancy($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProfile(Application $profile): static
-    {
-        if ($this->profile->removeElement($profile)) {
-            $profile->removeVacancy($this);
         }
 
         return $this;

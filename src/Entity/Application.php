@@ -13,9 +13,13 @@ class Application
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'applications')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?profile $profile = null;
+    private ?vacancy $vacancy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'applications')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?user $user = null;
 
     #[ORM\Column]
     private ?bool $selected = null;
@@ -25,14 +29,26 @@ class Application
         return $this->id;
     }
 
-    public function getProfile(): ?profile
+    public function getVacancy(): ?vacancy
     {
-        return $this->profile;
+        return $this->vacancy;
     }
 
-    public function setProfile(profile $profile): static
+    public function setVacancy(?vacancy $vacancy): static
     {
-        $this->profile = $profile;
+        $this->vacancy = $vacancy;
+
+        return $this;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
