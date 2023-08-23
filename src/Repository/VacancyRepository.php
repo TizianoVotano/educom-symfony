@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Vacancy;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,6 +20,11 @@ class VacancyRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Vacancy::class);
+    }
+
+    
+    public function getAllVacancies() {
+        $this->findAll();
     }
 
 //    /**

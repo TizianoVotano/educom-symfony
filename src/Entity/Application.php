@@ -15,11 +15,11 @@ class Application
 
     #[ORM\ManyToOne(inversedBy: 'applications')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?vacancy $vacancy = null;
+    private ?Vacancy $vacancy = null;
 
     #[ORM\ManyToOne(inversedBy: 'applications')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\Column]
     private ?bool $selected = null;
@@ -29,24 +29,24 @@ class Application
         return $this->id;
     }
 
-    public function getVacancy(): ?vacancy
+    public function getVacancy(): ?Vacancy
     {
         return $this->vacancy;
     }
 
-    public function setVacancy(?vacancy $vacancy): static
+    public function setVacancy(?Vacancy $vacancy): static
     {
         $this->vacancy = $vacancy;
 
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
