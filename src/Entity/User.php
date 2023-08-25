@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -30,46 +30,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 70)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 70, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_of_birth = null;
 
-    #[ORM\Column(length: 12)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $tel_nr = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $address = null;
-
-    #[ORM\Column(length: 8, nullable: true)]
+    #[ORM\Column(length: 6, nullable: true)]
     private ?string $postal_code = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 40)]
     private ?string $city = null;
-
-    #[ORM\Column(length: 200, nullable: true)]
-    private ?string $cv = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $motivation = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Vacancy::class)]
-    private Collection $vacancies;
+    #[ORM\Column(length: 80, nullable: true)]
+    private ?string $cv = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Application::class)]
-    private Collection $applications;
+    #[ORM\Column(length: 70, nullable: true)]
+    private ?string $address = null;
 
-    public function __construct()
-    {
-        $this->vacancies = new ArrayCollection();
-        $this->applications = new ArrayCollection();
+    public function __construct() {
+        $this->setRoles(["ROLE_USER"]);
     }
 
     public function getId(): ?int
@@ -114,7 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_CANDIDATE';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -166,7 +158,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->firstname;
     }
 
-    public function setFirstname(?string $firstname): static
+    public function setFirstname(string $firstname): static
     {
         $this->firstname = $firstname;
 
@@ -202,7 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->date_of_birth;
     }
 
-    public function setDateOfBirth(\DateTimeInterface $date_of_birth): static
+    public function setDateOfBirth(?\DateTimeInterface $date_of_birth): static
     {
         $this->date_of_birth = $date_of_birth;
 
@@ -214,21 +206,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->tel_nr;
     }
 
-    public function setTelNr(string $tel_nr): static
+    public function setTelNr(?string $tel_nr): static
     {
         $this->tel_nr = $tel_nr;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?string $address): static
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -257,18 +237,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCv(): ?string
-    {
-        return $this->cv;
-    }
-
-    public function setCv(?string $cv): static
-    {
-        $this->cv = $cv;
-
-        return $this;
-    }
-
     public function getMotivation(): ?string
     {
         return $this->motivation;
@@ -281,62 +249,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Vacancy>
-     */
-    public function getVacancies(): Collection
+    public function getCv(): ?string
     {
-        return $this->vacancies;
+        return $this->cv;
     }
 
-    public function addVacancy(Vacancy $vacancy): static
+    public function setCv(?string $cv): static
     {
-        if (!$this->vacancies->contains($vacancy)) {
-            $this->vacancies->add($vacancy);
-            $vacancy->setUser($this);
-        }
+        $this->cv = $cv;
 
         return $this;
     }
 
-    public function removeVacancy(Vacancy $vacancy): static
+    public function getAddress(): ?string
     {
-        if ($this->vacancies->removeElement($vacancy)) {
-            // set the owning side to null (unless already changed)
-            if ($vacancy->getUser() === $this) {
-                $vacancy->setUser(null);
-            }
-        }
-
-        return $this;
+        return $this->address;
     }
 
-    /**
-     * @return Collection<int, Application>
-     */
-    public function getApplications(): Collection
+    public function setAddress(?string $address): static
     {
-        return $this->applications;
-    }
-
-    public function addApplication(Application $application): static
-    {
-        if (!$this->applications->contains($application)) {
-            $this->applications->add($application);
-            $application->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeApplication(Application $application): static
-    {
-        if ($this->applications->removeElement($application)) {
-            // set the owning side to null (unless already changed)
-            if ($application->getUser() === $this) {
-                $application->setUser(null);
-            }
-        }
+        $this->address = $address;
 
         return $this;
     }

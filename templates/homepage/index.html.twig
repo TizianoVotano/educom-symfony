@@ -8,16 +8,13 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/Programs/Xampp/htdocs/educom-symfony/src/Controller/HomepageController.php'|file_link(0) }}">src/Controller/HomepageController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/Programs/Xampp/htdocs/educom-symfony/templates/homepage/index.html.twig'|file_link(0) }}">templates/homepage/index.html.twig</a></code></li>
-    </ul>
-</div>
-<pre>
-    {{ dump(data) }}
-</pre>
+<h1>HomePage</h1>
+{# <pre>
+    {% for vacancy in data %}
+        {{vacancy.User.lastname}}
+        <pre>
+            {{ dump(vacancy) }}
+        </pre>
+    {% endfor %}
+</pre> #}
 {% endblock %}
