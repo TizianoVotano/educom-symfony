@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -60,8 +62,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 70, nullable: true)]
     private ?string $address = null;
 
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Vacancy::class)]
+    private Collection $vacancies;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Application::class)]
+    private Collection $applications;
+
     public function __construct() {
         $this->setRoles(["ROLE_CANDIDATE"]);
+        $this->vacancies = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -269,6 +279,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAddress(?string $address): static
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vacancy>
+     */
+    public function getVacancies(): Collection
+    {
+        return $this->vacancies;
+    }
+
+    public function addVacancy(Vacancy $vacancy): static
+    {
+        if (!$this->vacancies->contains($vacancy)) {
+            $this->vacancies->add($vacancy);
+            $vacancy->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVacancy(Vacancy $vacancy): static
+    {
+        if ($this->vacancies->removeElement($vacancy)) {
+            // set the owning side to null (unless already changed)
+            if ($vacancy->getUser() === $this) {
+                $vacancy->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Application>
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): static
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
+            $application->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): static
+    {
+        if ($this->applications->removeElement($application)) {
+            // set the owning side to null (unless already changed)
+            if ($application->getUser() === $this) {
+                $application->setUser(null);
+            }
+        }
 
         return $this;
     }
