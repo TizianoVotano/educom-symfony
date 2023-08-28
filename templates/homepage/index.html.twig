@@ -9,12 +9,11 @@
 </style>
 
 <h1>HomePage</h1>
-{# <pre>
+{{ dump(data) }}
     {% for vacancy in data %}
         {{vacancy.User.lastname}}
         <pre>
             {{ dump(vacancy) }}
         </pre>
     {% endfor %}
-</pre> #}
 {% endblock %}

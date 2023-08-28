@@ -12,20 +12,19 @@ use App\Service\UserService;
 #[Route('/')]
 class HomepageController extends AbstractController
 {
-    // private $vacancyService;
-    // private $userService;
+    private $vacancyService;
 
-    // public function __construct(VacancyService $vacancyService) {
-    //     $this->vacancyService = $vacancyService;
-    // }
+    public function __construct(VacancyService $vacancyService) {
+        $this->vacancyService = $vacancyService;
+    }
 
     #[Route('/', name: 'homepage')]
     public function index(): Response
     {
-       // $data = $this->vacancyService->getVacancy();
+        $data = $this->vacancyService->getVacancy();
         return $this->render('homepage/index.html.twig', [
             'controller_name' => 'HomepageController',
-            'data' => ''//$data
+            'data' => $data
         ]);
     }
 }
