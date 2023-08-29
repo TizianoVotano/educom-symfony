@@ -115,8 +115,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+        // Unnecessary because newly created roles are set as ROLE_CANDIDATE by default
         // guarantee every user at least has ROLE_CANDIDATE
-        $roles[] = 'ROLE_CANDIDATE';
+        //$roles[] = 'ROLE_CANDIDATE';
 
         return array_unique($roles);
     }
