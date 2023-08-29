@@ -11,9 +11,13 @@
 <h1>HomePage</h1>
 {{ dump(data) }}
     {% for vacancy in data %}
-        {{vacancy.User.lastname}}
-        <pre>
+        {{vacancy.startdate|date}}
+        {{vacancy.User.picture}}
+        {{vacancy.function}} voor {{vacancy.User.firstname}}
+        {{vacancy.description}}
+
+        {# <pre>
             {{ dump(vacancy) }}
-        </pre>
+        </pre> #}
     {% endfor %}
 {% endblock %}

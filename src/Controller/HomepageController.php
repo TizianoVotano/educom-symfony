@@ -27,4 +27,23 @@ class HomepageController extends AbstractController
             'data' => $data
         ]);
     }
+
+    #[Route('/details', name: 'details')]
+    public function details(): Response
+    {
+        $data = $this->vacancyService->getVacancy(2);
+        return $this->render('homepage/details.html.twig', [
+            'controller_name' => 'HomepageController',
+            'data' => $data
+        ]);
+    }
+
+    public function apply(): Response 
+    {
+        $data = '';
+        return $this->render('homepage/details.html.twig', [
+            'controller_name' => 'HomepageController',
+            'data' => $data
+        ]);
+    }
 }
