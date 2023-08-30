@@ -9,4 +9,14 @@
 </style>
 
 <h1>Candidates - Overview</h1>
+<pre>
+    {{ dump(data) }}
+</pre>
+<pre>
+    {% for vacancies in data.vacancies %}
+        {% if vacancies.id == vacancies.id %}
+            {{ dump(vacancies.first)}}
+        {% endif %}
+    {% endfor %}
+</pre>
 {% endblock %}

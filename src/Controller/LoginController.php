@@ -31,12 +31,15 @@ class LoginController extends AbstractController
     {
         $user = $this->getUser();
         $roles = $user->getRoles();
-        if (in_array('ROLE_CANDIDATE', $roles)) {
-            $returnPath = 'app_candidate';
-        } else { // Employer
-            $returnPath = 'app_employer';
-        }
 
+        if (in_array('ROLE_ADMIN', $roles)) {
+            dd("The admin role hasn't been implemented yet");
+        } else if (in_array('ROLE_CANDIDATE', $roles)) {
+            $returnPath = 'candidate_profile';
+        } else { // Employer
+            $returnPath = 'employer_profile';
+        }
+        
         return $this->redirectToRoute($returnPath);
     }
 }
